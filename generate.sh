@@ -22,13 +22,13 @@ function updateRepo {
 }
 
 if [ ! -d apiGateway ]; then
-    git clone git@gitlab.com:icwt-global/read-my-book-api.git apiGateway
+    git clone git@github.com:konstantindubkov/readMyBook-server.git apiGateway
 else
     updateRepo apiGateway
 fi
 
 if [ ! -d client ]; then
-    git clone git@gitlab.com:myfailemtions/rmb.git client
+    git clone git@github.com:konstantindubkov/readMyBook.git client
 else
     updateRepo client
 fi
