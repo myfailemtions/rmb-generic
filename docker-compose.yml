@@ -1,0 +1,52 @@
+version: "3.4"
+services:
+  client:
+    build:
+      context: ./client
+      target: develop
+    volumes:
+      - ./.git:/usr/src/.git
+      - ./client:/usr/src/client
+      # Remove these if you have pure JS dependencies
+      - /usr/src/client/node_modules
+    ports:
+      - "4200:4200"
+  api:
+    build:
+      context: ./apiGateway
+      target: develop
+    volumes:
+      - ./apiGateway:/usr/src/apiGateway
+      - /usr/src/apiGateway/node_modules
+    depends_on:
+      - mongo
+    ports:
+      - "1337:1337"
+    environment:
+      DATABASE_CLIENT: mongo
+      DATABASE_NAME: read-my-book
+      DATABASE_HOST: mongo
+      DATABASE_PORT: 27017
+      DATABASE_USERNAME: icwtroot
+      DATABASE_PASSWORD: nd21tjnd21tj
+      WAIT_HOSTS: mongo:27017
+    links:
+      - mongo:mongo
+    networks:
+      - api
+      - databases
+  mongo:
+    image: mongo
+    networks:
+      - databases
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: icwtroot
+      MONGO_INITDB_ROOT_PASSWORD: nd21tjnd21tj
+    volumes:
+      - ./data/db:/data/jdb
+    ports:
+      - "27017:27017"
+    command: mongod
+networks:
+  api:
+  databases:
